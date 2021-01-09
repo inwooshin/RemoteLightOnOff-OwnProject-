@@ -21,7 +21,7 @@ void setup() {
 
   left.attach(D0);
   left.write(35);
-  right.attach(D1);
+  right.attach(D6);
   right.write(90);
 
   pinMode(delayPin, OUTPUT);
@@ -56,22 +56,27 @@ void loop() {
   if (irrecv.decode(&results)){ 
     serialPrintUint64(results.value, HEX);
     Serial.println("");  
-    digitalWrite(delayPin,HIGH);
-    delay(50);
     switch (results.value) {
       case 0xFFA25D: 
-        right.write(7);
+        digitalWrite(delayPin,HIGH);
+        delay(100);
+        right.write(125);
         delay(300);
-        right.write(35);
-        delay(300); break;
+        right.write(90);
+        delay(300);
+        digitalWrite(delayPin,LOW);
+        break;
       case 0xFF629D: 
-        left.write(125);
+        digitalWrite(delayPin,HIGH);
+        delay(100);
+        left.write(7);
         delay(300);
-        left.write(90);
-        delay(300); break; 
+        left.write(35);
+        delay(300);
+        digitalWrite(delayPin,LOW);
+        break; 
     }
     irrecv.resume();
-    digitalWrite(delayPin,LOW);
   }
 
 }
@@ -85,17 +90,17 @@ void handleMessage(AdafruitIO_Data *data) {
   if(state) {
     digitalWrite(delayPin,HIGH);
     delay(300);
-    right.write(7);
+    right.write(125);
     delay(300);
-    right.write(35);
+    right.write(90);
     delay(300);
     }
   else {
     digitalWrite(delayPin,HIGH);
     delay(300);
-    left.write(125);
+    left.write(7);
     delay(300);
-    left.write(90);
+    left.write(35);
     delay(300);
     }
   digitalWrite(delayPin,LOW);
