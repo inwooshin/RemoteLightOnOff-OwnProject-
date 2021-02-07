@@ -13,6 +13,26 @@ Servo left, right;
 IRrecv irrecv(14);
 decode_results results;
 
+void right(){
+  digitalWrite(delayPin,HIGH);
+  delay(100);
+  right.write(125);
+  delay(300);
+  right.write(90);
+  delay(300);
+  digitalWrite(delayPin,LOW);
+}
+
+void left(){
+  digitalWrite(delayPin,HIGH);
+  delay(100);
+  left.write(7);
+  delay(300);
+  left.write(35);
+  delay(300);
+  digitalWrite(delayPin,LOW); 
+}
+
 
 void setup() {
 
@@ -58,22 +78,10 @@ void loop() {
     Serial.println("");  
     switch (results.value) {
       case 0xFFA25D: 
-        digitalWrite(delayPin,HIGH);
-        delay(100);
-        right.write(125);
-        delay(300);
-        right.write(90);
-        delay(300);
-        digitalWrite(delayPin,LOW);
+        right();
         break;
       case 0xFF629D: 
-        digitalWrite(delayPin,HIGH);
-        delay(100);
-        left.write(7);
-        delay(300);
-        left.write(35);
-        delay(300);
-        digitalWrite(delayPin,LOW);
+        left();
         break; 
     }
     irrecv.resume();
@@ -88,20 +96,9 @@ void handleMessage(AdafruitIO_Data *data) {
 
   int state = data->toInt();
   if(state) {
-    digitalWrite(delayPin,HIGH);
-    delay(300);
-    right.write(125);
-    delay(300);
-    right.write(90);
-    delay(300);
+    right();
     }
   else {
-    digitalWrite(delayPin,HIGH);
-    delay(300);
-    left.write(7);
-    delay(300);
-    left.write(35);
-    delay(300);
+    left();
     }
-  digitalWrite(delayPin,LOW);
 }
